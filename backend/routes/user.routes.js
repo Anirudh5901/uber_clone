@@ -3,6 +3,7 @@ const router = express.Router();
 const { body } = require("express-validator");
 //express validator package used to validate the data received from  the frontend.
 const userController = require("../controllers/user.controller");
+const authMiddleware = require("../middlewares/auth.middleware");
 
 router.post(
   "/register",
@@ -25,5 +26,9 @@ router.post("/login", [
     .withMessage("Password needs to be atleast 6 characters long"),
   userController.loginUser,
 ]);
+
+router.get("/profile", authMiddleware.authUser, userController.getUserProfile);
+
+router.get("/logout", authMiddleware.authUser, userController.logoutUser);
 
 module.exports = router;

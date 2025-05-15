@@ -261,3 +261,110 @@ curl -X POST http://localhost:4000/users/login \
   ]
 }
 ```
+
+# API Documentation: `/users/profile`
+
+## Endpoint
+
+**GET** `/users/profile`
+
+## Description
+
+This endpoint retrieves the profile information of the currently authenticated user.
+
+## Request
+
+### Headers
+
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+## Response
+
+### Success (200 OK)
+
+If the user is authenticated, the server responds with:
+
+#### Example Response
+
+```json
+{
+  "_id": "user_id_here",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com"
+}
+```
+
+### Error (401 Unauthorized)
+
+If the user is not authenticated, the server responds with:
+
+#### Example Response
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+## Example Usage
+
+#### Request
+
+```bash
+curl -X GET http://localhost:4000/users/profile \
+-H "Authorization: Bearer jwt_token_here"
+```
+
+# API Documentation: `/users/logout`
+
+## Endpoint
+
+**GET** `/users/logout`
+
+## Description
+
+This endpoint logs out the currently authenticated user by invalidating their token and clearing cookies.
+
+## Request
+
+### Headers
+
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+## Response
+
+### Success (200 OK)
+
+If the logout is successful, the server responds with:
+
+#### Example Response
+
+```json
+{
+  "message": "Logged Out"
+}
+```
+
+### Error (401 Unauthorized)
+
+If the user is not authenticated, the server responds with:
+
+#### Example Response
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+## Example Usage
+
+#### Request
+
+```bash
+curl -X GET http://localhost:4000/users/logout \
+-H "Authorization: Bearer jwt_token_here"
+```
