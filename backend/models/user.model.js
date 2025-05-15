@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    select: false,
+    select: false, //By default, the password field will not be included when you fetch user documents.This is a security measure to prevent accidentally exposing passwords
   },
   socketId: {
     type: String,

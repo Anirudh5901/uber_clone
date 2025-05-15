@@ -19,3 +19,24 @@ module.exports.registerUser = async (req, res, next) => {
 
   res.status(201).json({ token, user });
 };
+
+module.exports.loginUser = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  const { email, password } = req.body;
+
+  const user = await userModel.findOne({ email }).select("+password"); //Explicitly includes the password field in the returned document.Allows you to access user.password for password verification
+  if (!user) {
+    return res.status(401).json({ messsage: `Invalid email or password` });
+  }
+  const passworMatch = await user.comparePassword(password);
+  if (!passworMatch) {
+    return res.status(401).json({ messsage: `Invalid email or password` });
+  }
+
+  const token = user.generateAuthToken();
+
+  return res.status(200).json({ token, user });
+};
