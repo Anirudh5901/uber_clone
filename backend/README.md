@@ -368,3 +368,228 @@ If the user is not authenticated, the server responds with:
 curl -X GET http://localhost:4000/users/logout \
 -H "Authorization: Bearer jwt_token_here"
 ```
+
+# API Documentation: `/captains/register`
+
+## Endpoint
+
+**POST** `/captains/register`
+
+## Description
+
+This endpoint registers a new captain. It validates the input data, hashes the password, creates a new captain in the database, and returns a JSON Web Token (JWT) along with the captain details.
+
+## Request
+
+### Headers
+
+- `Content-Type: application/json`
+
+### Body
+
+The request body should be a JSON object with the following fields:
+
+| Field                 | Type   | Required | Description                                      |
+| --------------------- | ------ | -------- | ------------------------------------------------ |
+| `fullname.firstname`  | String | Yes      | First name of the captain (minimum 3 characters) |
+| `fullname.lastname`   | String | No       | Last name of the captain (minimum 3 characters)  |
+| `email`               | String | Yes      | Email address of the captain (must be valid)     |
+| `password`            | String | Yes      | Password for the captain (minimum 6 characters)  |
+| `vehicle.color`       | String | Yes      | Color of the vehicle (minimum 3 characters)      |
+| `vehicle.plate`       | String | Yes      | Vehicle plate number (minimum 3 characters)      |
+| `vehicle.capacity`    | Number | Yes      | Vehicle capacity (minimum 1)                     |
+| `vehicle.vehicleType` | String | Yes      | Type of vehicle ("car", "motorcycle", "auto")    |
+
+## Response
+
+### Success (201 Created)
+
+#### Example Response
+
+```json
+{
+  "token": "jwt_token_here",
+  "captain": {
+    "_id": "captain_id_here",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "vehicle": {
+      "color": "black",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive"
+  }
+}
+```
+
+### Error (400 Bad Request)
+
+#### Example Response
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Invalid vehicle type",
+      "param": "vehicle.vehicleType",
+      "location": "body"
+    }
+  ]
+}
+```
+
+## Example Usage
+
+#### Request
+
+```bash
+curl -X POST http://localhost:4000/captains/register \
+-H "Content-Type: application/json" \
+-d '{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "password": "password123",
+  "vehicle": {
+    "color": "black",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}'
+```
+
+# API Documentation: `/captains/login`
+
+## Endpoint
+
+**POST** `/captains/login`
+
+## Description
+
+This endpoint authenticates an existing captain. It validates the input data, verifies the password, and returns a JSON Web Token (JWT) along with the captain details.
+
+## Request
+
+### Headers
+
+- `Content-Type: application/json`
+
+### Body
+
+| Field      | Type   | Required | Description                                     |
+| ---------- | ------ | -------- | ----------------------------------------------- |
+| `email`    | String | Yes      | Email address of the captain (must be valid)    |
+| `password` | String | Yes      | Password for the captain (minimum 6 characters) |
+
+## Response
+
+### Success (200 OK)
+
+#### Example Response
+
+```json
+{
+  "token": "jwt_token_here",
+  "captain": {
+    "_id": "captain_id_here",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "vehicle": {
+      "color": "black",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive"
+  }
+}
+```
+
+# API Documentation: `/captains/profile`
+
+## Endpoint
+
+**GET** `/captains/profile`
+
+## Description
+
+This endpoint retrieves the profile information of the currently authenticated captain.
+
+## Request
+
+### Headers
+
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+## Response
+
+### Success (200 OK)
+
+#### Example Response
+
+```json
+{
+  "_id": "captain_id_here",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "vehicle": {
+    "color": "black",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  },
+  "status": "inactive"
+}
+```
+
+# API Documentation: `/captains/logout`
+
+## Endpoint
+
+**GET** `/captains/logout`
+
+## Description
+
+This endpoint logs out the currently authenticated captain by invalidating their token and clearing cookies.
+
+## Request
+
+### Headers
+
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+## Response
+
+### Success (200 OK)
+
+#### Example Response
+
+```json
+{
+  "message": "Logged Out"
+}
+```
+
+### Error (401 Unauthorized)
+
+#### Example Response
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
