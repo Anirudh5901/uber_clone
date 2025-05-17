@@ -1,22 +1,25 @@
-import React, { useState } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
+import { CaptainDataContext } from "../context/CaptainContext";
+import axios from "axios";
 
 const CaptainSignup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
-  const [captainData, setcaptainData] = useState({});
+  const { captain, setCaptain } = useContext(CaptainDataContext);
   const [color, setColor] = useState("");
   const [plate, setPlate] = useState("");
   const [capacity, setCapacity] = useState(0);
   const [type, setType] = useState("car");
   const navigate = useNavigate();
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setcaptainData({
+    const newCaptain = {
       fullname: {
         firstname: firstname,
         lastname: lastname,
@@ -29,8 +32,24 @@ const CaptainSignup = () => {
         capacity: capacity,
         vehicleType: type,
       },
-    });
-    console.log(captainData);
+    };
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/captains/register`,
+        newCaptain
+      );
+
+      if (response.status === 201) {
+        const data = response.data;
+        setCaptain(data.captain);
+        localStorage.setItem("token", data.token);
+        navigate("/captain-home");
+      }
+    } catch (error) {
+      console.log("Error registering captain", error);
+    }
+
     setFirstname("");
     setLastname("");
     setEmail("");
@@ -139,14 +158,19 @@ const CaptainSignup = () => {
               </div>
               <div className="flex flex-col">
                 <p>Type:</p>
-                <input
+                <select
                   className="bg-[#eeeeee] mb-2 rounded px-4 py-2  w-full text-lg placeholder:text-base"
                   value={type}
                   onChange={(e) => setType(e.target.value)}
-                  type="text"
                   required
-                  placeholder="type"
-                />
+                >
+                  <option value="" disabled>
+                    Select vehicle type
+                  </option>
+                  <option value={`car`}>Car</option>
+                  <option value={`auto`}>Auto</option>
+                  <option value={`motorcycle`}>Motorcycle</option>
+                </select>
               </div>
             </div>
           </div>

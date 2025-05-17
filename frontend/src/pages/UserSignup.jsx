@@ -1,30 +1,50 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
+import axios from "axios";
+import { UserDataContext } from "../context/UserContext";
 
 const UserSignup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
-  const [userData, setUserData] = useState({});
+  const { user, setUser } = React.useContext(UserDataContext);
   const navigate = useNavigate();
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setUserData({
+    const newUser = {
       fullname: {
         firstname: firstname,
         lastname: lastname,
       },
       email: email,
       password: password,
-    });
-    console.log(userData);
+    };
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/users/register`,
+        newUser
+      );
+      console.log(`${import.meta.env.VITE_BASE_URL}/users/register`);
+
+      if (response.status === 201) {
+        const data = response.data;
+        setUser(data.user);
+        localStorage.setItem("token", data.token);
+        navigate("/home");
+      }
+    } catch (error) {
+      console.log("Error submitting user signup data", error);
+    }
+
     setFirstname("");
     setLastname("");
     setEmail("");
     setPassword("");
+    navigate("/home");
   };
   return (
     <div className="bg-white h-screen w-full p-7 flex flex-col justify-evenly">
