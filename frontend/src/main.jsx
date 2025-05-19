@@ -12,7 +12,7 @@ createRoot(document.getElementById("root")).render(
       <UserContext>
         <BrowserRouter>
           <div className="h-screen w-full bg-black">
-            <div className="h-[667px] w-[375px] mx-auto">
+            <div className="h-screen max-w-lg mx-auto">
               <App />
             </div>
           </div>
