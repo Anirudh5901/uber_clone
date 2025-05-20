@@ -3,12 +3,28 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { IoMdArrowDropdownCircle } from "react-icons/io";
 import LocationSearchPanel from "../components/LocationSearchPanel";
+import { IoManSharp } from "react-icons/io5";
+import VehiclePanel from "../components/VehiclePanel";
+import ConfirmRide from "../components/ConfirmRide";
+import LookingForCaptain from "../components/LookingForCaptain";
+import WaitingForCaptain from "../components/WaitingForCaptain";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
+  const [vehiclePanelOpen, setvehiclePanelOpen] = useState(false);
+  const [confirmRidePanelOpen, setConfirmRidePanelOpen] = useState(false);
+  const [lookingForCaptainPanelOpen, setLookingForCaptainPanelOpen] =
+    useState(false);
+  const [waitingForCaptainPanelOpen, setWaitingForCaptainPanelOpen] =
+    useState(false);
+
   const panelRef = useRef(null);
+  const vehiclePanelOpenRef = useRef(null);
+  const confirmRidePanelOpenRef = useRef(null);
+  const lookingForCaptainRef = useRef(null);
+  const waitingForCaptainRef = useRef(null);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -27,8 +43,56 @@ const Home = () => {
     }
   }, [panelOpen]);
 
+  useGSAP(() => {
+    if (vehiclePanelOpen) {
+      gsap.to(vehiclePanelOpenRef.current, {
+        transform: "translateY(0)",
+      });
+    } else {
+      gsap.to(vehiclePanelOpenRef.current, {
+        transform: "translateY(100%)",
+      });
+    }
+  }, [vehiclePanelOpen]);
+
+  useGSAP(() => {
+    if (confirmRidePanelOpen) {
+      gsap.to(confirmRidePanelOpenRef.current, {
+        transform: "translateY(0)",
+      });
+    } else {
+      gsap.to(confirmRidePanelOpenRef.current, {
+        transform: "translateY(100%)",
+      });
+    }
+  }, [confirmRidePanelOpen]);
+
+  useGSAP(() => {
+    if (lookingForCaptainPanelOpen) {
+      gsap.to(lookingForCaptainRef.current, {
+        transform: "translateY(0)",
+      });
+    } else {
+      gsap.to(lookingForCaptainRef.current, {
+        transform: "translateY(100%)",
+      });
+    }
+  }, [lookingForCaptainPanelOpen]);
+
+  useGSAP(() => {
+    if (waitingForCaptainPanelOpen) {
+      gsap.to(waitingForCaptainRef.current, {
+        transform: "translateY(0)",
+      });
+    } else {
+      gsap.to(waitingForCaptainRef.current, {
+        transform: "translateY(100%)",
+      });
+    }
+  }, [waitingForCaptainPanelOpen]);
+
   return (
-    <div className="relative h-screen">
+    <div className="relative h-screen overflow-hidden z-2">
       {/* image/logo */}
       <div className="h-full w-full bg-violet-400">
         {/* image as temporary background */}
@@ -71,9 +135,49 @@ const Home = () => {
             />
           </form>
         </div>
-        <div ref={panelRef} className=" bg-white h-0 mb-0">
-          <LocationSearchPanel />
+        <div ref={panelRef} className=" bg-white h-0">
+          <LocationSearchPanel
+            setvehiclePanelOpen={setvehiclePanelOpen}
+            setPanelOpen={setPanelOpen}
+          />
         </div>
+      </div>
+      <div
+        ref={vehiclePanelOpenRef}
+        className="absolute z-10 bottom-0 p-5  bg-white w-full translate-y-full"
+      >
+        <VehiclePanel
+          setvehiclePanelOpen={setvehiclePanelOpen}
+          setConfirmRidePanelOpen={setConfirmRidePanelOpen}
+        />
+      </div>
+      <div
+        ref={confirmRidePanelOpenRef}
+        className="absolute z-10 bottom-0 p-5  bg-white w-full translate-y-full"
+      >
+        <ConfirmRide
+          setVehiclePanelOpen={setvehiclePanelOpen}
+          setConfrimRidePanelOpen={setConfirmRidePanelOpen}
+          setLookingForCaptainPanelOpen={setLookingForCaptainPanelOpen}
+        />
+      </div>
+
+      <div
+        ref={lookingForCaptainRef}
+        className="absolute z-10 bottom-0 p-5  bg-white w-full translate-y-full"
+      >
+        <LookingForCaptain
+          setLookingForCaptainPanelOpen={setLookingForCaptainPanelOpen}
+          setWaitingForCaptainPanelOpen={setWaitingForCaptainPanelOpen}
+        />
+      </div>
+      <div
+        ref={waitingForCaptainRef}
+        className="absolute z-10 bottom-0 p-5  bg-white w-full translate-y-full"
+      >
+        <WaitingForCaptain
+          setWaitingForCaptainPanelOpen={setWaitingForCaptainPanelOpen}
+        />
       </div>
     </div>
   );
