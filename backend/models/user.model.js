@@ -45,5 +45,5 @@ userSchema.statics.hashPassword = async function (password) {
   return await bcrypt.hash(password, 10);
 }; // Adds methods to the Model constructor. Used for operations that don't require a specific document instance. Often used for utility functions, factory methods, or operations that work with collections. Since we will be hashing password for every user instance, ".statics" was used here instead of ".methods".
 
-const userModel = mongoose.model("user", userSchema);
+const userModel = mongoose.model("User", userSchema);
 module.exports = userModel;
