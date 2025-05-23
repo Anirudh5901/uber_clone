@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
@@ -10,11 +9,11 @@ const CaptainSignup = () => {
   const [password, setPassword] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
-  const { captain, setCaptain } = useContext(CaptainDataContext);
+  const setCaptain = useContext(CaptainDataContext);
   const [color, setColor] = useState("");
   const [plate, setPlate] = useState("");
-  const [capacity, setCapacity] = useState(0);
-  const [type, setType] = useState("car");
+  const [capacity, setCapacity] = useState("");
+  const [type, setType] = useState("");
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
@@ -42,6 +41,7 @@ const CaptainSignup = () => {
 
       if (response.status === 201) {
         const data = response.data;
+        console.log("Setting captain in signup");
         setCaptain(data.captain);
         localStorage.setItem("token", data.token);
         navigate("/captain-home");

@@ -2,7 +2,12 @@ import React from "react";
 import { IoMdArrowDropdownCircle } from "react-icons/io";
 import { IoManSharp } from "react-icons/io5";
 
-const VehiclePanel = ({ setvehiclePanelOpen, setConfirmRidePanelOpen }) => {
+const VehiclePanel = ({
+  setvehiclePanelOpen,
+  setConfirmRidePanelOpen,
+  fare,
+  setVehicleType,
+}) => {
   return (
     <div>
       <IoMdArrowDropdownCircle
@@ -14,7 +19,8 @@ const VehiclePanel = ({ setvehiclePanelOpen, setConfirmRidePanelOpen }) => {
         className="flex items-center justify-between mb-3 shadow-lg rounded-xl border-2 border-gray-50 active:border-black hover:cursor-pointer hover:scale-105 hover:shadow-xl transition-all duration-200"
         onClick={() => {
           setConfirmRidePanelOpen(true);
-          setvehiclePanelOpen(false);
+          //setvehiclePanelOpen(false);
+          setVehicleType("car");
         }}
       >
         <img
@@ -24,7 +30,7 @@ const VehiclePanel = ({ setvehiclePanelOpen, setConfirmRidePanelOpen }) => {
         />
         <div className="w-1/2 flex flex-col justify-center items-center ">
           <h4 className="flex text-md font-bold">
-            UberGo{" "}
+            MoverGo{" "}
             <span>
               <IoManSharp />
             </span>
@@ -33,14 +39,15 @@ const VehiclePanel = ({ setvehiclePanelOpen, setConfirmRidePanelOpen }) => {
           <h5>2 mins away</h5>
           <p className="text-sm text-gray-500">Affordable, compact rides</p>
         </div>
-        <h2 className="text-2xl font-semibold">Rs193.20</h2>
+        <h2 className="text-2xl font-semibold">Rs{Math.round(fare.car, 2)}</h2>
       </div>
 
       <div
         className="flex items-center justify-between w-full shadow-lg rounded-xl border-2 border-gray-50 active:border-black hover:cursor-pointer hover:scale-105 hover:shadow-xl transition-all duration-200"
         onClick={() => {
           setConfirmRidePanelOpen(true);
-          setvehiclePanelOpen(false);
+          //setvehiclePanelOpen(false);
+          setVehicleType("motorcycle");
         }}
       >
         <img
@@ -50,7 +57,7 @@ const VehiclePanel = ({ setvehiclePanelOpen, setConfirmRidePanelOpen }) => {
         />
         <div className="w-1/2 flex flex-col justify-center items-center">
           <h4 className="flex text-md font-bold">
-            UberMoto{" "}
+            MoverMoto{" "}
             <span>
               <IoManSharp />
             </span>
@@ -59,14 +66,17 @@ const VehiclePanel = ({ setvehiclePanelOpen, setConfirmRidePanelOpen }) => {
           <h5>2 mins away</h5>
           <p className="text-sm text-gray-500">Affordable, motorcycle rides</p>
         </div>
-        <h2 className="text-2xl font-semibold">Rs65.17</h2>
+        <h2 className="text-2xl font-semibold">
+          Rs{Math.round(fare.motorcycle, 2)}
+        </h2>
       </div>
 
       <div
         className="flex items-center justify-between w-full shadow-lg rounded-xl border-2 border-gray-50 active:border-black hover:cursor-pointer hover:scale-105 hover:shadow-xl transition-all duration-200"
         onClick={() => {
           setConfirmRidePanelOpen(true);
-          setvehiclePanelOpen(false);
+          //setvehiclePanelOpen(false);
+          setVehicleType("auto");
         }}
       >
         <img
@@ -77,7 +87,7 @@ const VehiclePanel = ({ setvehiclePanelOpen, setConfirmRidePanelOpen }) => {
 
         <div className="w-1/2 flex flex-col justify-center items-center p-3">
           <h4 className="flex text-md font-bold">
-            UberAuto{" "}
+            MoverAuto{" "}
             <span>
               <IoManSharp />
             </span>
@@ -86,7 +96,7 @@ const VehiclePanel = ({ setvehiclePanelOpen, setConfirmRidePanelOpen }) => {
           <h5>2 mins away</h5>
           <p className="text-sm text-gray-500">Affordable, auto rides</p>
         </div>
-        <h2 className="text-2xl font-semibold">Rs165.17</h2>
+        <h2 className="text-2xl font-semibold">Rs{fare.auto}</h2>
       </div>
     </div>
   );

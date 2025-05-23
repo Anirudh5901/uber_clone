@@ -11,7 +11,7 @@ import ConfirmRidePopUp from "../components/ConfirmRidePopUp";
 const CaptainHome = () => {
   const navigate = useNavigate();
 
-  const [ridePopUpPanelOpen, setRidePopUpPanelOpen] = useState(true);
+  const [ridePopUpPanelOpen, setRidePopUpPanelOpen] = useState(false);
   const [confirmRidePopUpPanelOpen, setConfirmRidePopUpPanelOpen] =
     useState(false);
 

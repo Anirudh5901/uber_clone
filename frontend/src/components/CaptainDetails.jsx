@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import { MdAccessTime } from "react-icons/md";
 import { IoIosSpeedometer } from "react-icons/io";
 import { GiTakeMyMoney } from "react-icons/gi";
+import { CaptainDataContext } from "../context/CaptainContext";
 
 const CaptainDetails = () => {
+  const context = useContext(CaptainDataContext);
+  console.log("CaptainDetails context:", context);
+
+  if (!context) {
+    return (
+      <div>Context not available - Component is outside CaptainContext</div>
+    );
+  }
+
+  const { captain } = context;
+  console.log("CAPTAIN:", captain);
+
+  if (!captain) {
+    return <div className="bg-white p-4">Loading captain details...</div>;
+  }
   return (
     <div className=" bg-white flex flex-col items-center justify-evenly gap-y-3 h-full">
       <div className="flex w-full justify-between px-3 py-1 ">
@@ -12,9 +28,9 @@ const CaptainDetails = () => {
           src="https://swyft.pl/wp-content/uploads/2023/05/how-many-people-can-a-uberx-take.jpg"
         />
         <div className="text-right">
-          <h2 className="text-lg font-medium">Sarthak</h2>
-          <h4 className="text-xl font-semibold">MP04 AB 1234</h4>
-          <p className="text-sm text-gray-600">Maruti Suzuku Alto</p>
+          <h2 className="text-lg font-medium">{captain.fullname.firstname}</h2>
+          <h4 className="text-xl font-semibold">{captain.vehicle.plate}</h4>
+          <p className="text-sm text-gray-600">{captain.vehicle.vehicleType}</p>
         </div>
       </div>
 

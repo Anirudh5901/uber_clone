@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
@@ -8,39 +9,32 @@ const CaptainProtectedWrapper = ({ children }) => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const { setCaptain } = useContext(CaptainDataContext);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const verifyIsCaptainLoggingIn = async () => {
-      if (!token) {
-        navigate("/captain-login");
-      }
+    if (!token) {
+      navigate("/captain-login");
+    }
 
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/captains/profile`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
+    axios
+      .get(`${import.meta.env.VITE_BASE_URL}/captains/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
         if (response.status === 200) {
-          const data = response.data;
-          setCaptain(data.captain);
+          console.log("Profile API response:", response.data);
+          setCaptain(response.data);
+          console.log("setting captain in protected wrapper");
+          setLoading(false);
         }
-      } catch (error) {
-        console.log(error);
+      })
+      .catch((err) => {
         localStorage.removeItem("token");
         navigate("/captain-login");
-      } finally {
-        setLoading(false);
-      }
-    };
-    verifyIsCaptainLoggingIn();
-  }, [token, navigate, setCaptain]);
+      });
+  }, [token]);
 
   if (loading) {
     return <div>Loading...</div>;

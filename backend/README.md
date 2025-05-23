@@ -593,3 +593,377 @@ This endpoint logs out the currently authenticated captain by invalidating their
   "message": "Unauthorized"
 }
 ```
+
+# API Documentation: `/maps/get-coordinates`
+
+## Endpoint
+
+**GET** `/maps/get-coordinates`
+
+## Description
+
+This endpoint converts an address into geographical coordinates using the Google Maps Geocoding API.
+
+## Request
+
+### Headers
+
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+### Query Parameters
+
+| Parameter | Type   | Required | Description                           |
+| --------- | ------ | -------- | ------------------------------------- |
+| `address` | String | Yes      | The address to convert to coordinates |
+
+## Response
+
+### Success (200 OK)
+
+#### Example Response
+
+```json
+{
+  "ltd": 37.4224764,
+  "lng": -122.0842499
+}
+```
+
+### Error (400 Bad Request)
+
+#### Example Response
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Address must be at least 3 characters long",
+      "param": "address",
+      "location": "query"
+    }
+  ]
+}
+```
+
+## Example Usage
+
+```bash
+curl -X GET "http://localhost:4000/maps/get-coordinates?address=1600+Amphitheatre+Parkway" \
+-H "Authorization: Bearer jwt_token_here"
+```
+
+# API Documentation: `/maps/get-distance-time`
+
+## Endpoint
+
+**GET** `/maps/get-distance-time`
+
+## Description
+
+This endpoint calculates the distance and estimated travel time between two locations using the Google Maps Distance Matrix API.
+
+## Request
+
+### Headers
+
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+### Query Parameters
+
+| Parameter     | Type   | Required | Description                   |
+| ------------- | ------ | -------- | ----------------------------- |
+| `origin`      | String | Yes      | Starting point of the journey |
+| `destination` | String | Yes      | End point of the journey      |
+
+## Response
+
+### Success (200 OK)
+
+#### Example Response
+
+```json
+{
+  "distance": {
+    "text": "12.4 km",
+    "value": 12400
+  },
+  "duration": {
+    "text": "25 mins",
+    "value": 1500
+  }
+}
+```
+
+### Error (400 Bad Request)
+
+#### Example Response
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Origin must be at least 3 characters long",
+      "param": "origin",
+      "location": "query"
+    }
+  ]
+}
+```
+
+## Example Usage
+
+```bash
+curl -X GET "http://localhost:4000/maps/get-distance-time?origin=Silicon+Valley&destination=San+Francisco" \
+-H "Authorization: Bearer jwt_token_here"
+```
+
+# API Documentation: `/maps/get-suggestions`
+
+## Endpoint
+
+**GET** `/maps/get-suggestions`
+
+## Description
+
+This endpoint provides address suggestions based on user input using the Google Maps Place Autocomplete API.
+
+## Request
+
+### Headers
+
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+### Query Parameters
+
+| Parameter | Type   | Required | Description                           |
+| --------- | ------ | -------- | ------------------------------------- |
+| `input`   | String | Yes      | The text input to get suggestions for |
+
+## Response
+
+### Success (200 OK)
+
+#### Example Response
+
+```json
+[
+  {
+    "description": "Silicon Valley, California, USA",
+    "place_id": "ChIJ9T_5iuTKj4ARe3GfygqMnbk",
+    "structured_formatting": {
+      "main_text": "Silicon Valley",
+      "secondary_text": "California, USA"
+    }
+  }
+]
+```
+
+### Error (400 Bad Request)
+
+#### Example Response
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Input must be at least 3 characters long",
+      "param": "input",
+      "location": "query"
+    }
+  ]
+}
+```
+
+## Example Usage
+
+```bash
+curl -X GET "http://localhost:4000/maps/get-suggestions?input=Silicon" \
+-H "Authorization: Bearer jwt_token_here"
+```
+
+# API Documentation: `/maps/get-coordinates`
+
+## Endpoint
+
+**GET** `/maps/get-coordinates`
+
+## Description
+
+This endpoint converts an address into geographical coordinates using the Google Maps Geocoding API.
+
+## Request
+
+### Headers
+
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+### Query Parameters
+
+| Parameter | Type   | Required | Description                           |
+| --------- | ------ | -------- | ------------------------------------- |
+| `address` | String | Yes      | The address to convert to coordinates |
+
+## Response
+
+### Success (200 OK)
+
+#### Example Response
+
+```json
+{
+  "ltd": 37.4224764,
+  "lng": -122.0842499
+}
+```
+
+### Error (400 Bad Request)
+
+#### Example Response
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Address must be at least 3 characters long",
+      "param": "address",
+      "location": "query"
+    }
+  ]
+}
+```
+
+## Example Usage
+
+```bash
+curl -X GET "http://localhost:4000/maps/get-coordinates?address=1600+Amphitheatre+Parkway" \
+-H "Authorization: Bearer jwt_token_here"
+```
+
+# API Documentation: `/maps/get-distance-time`
+
+## Endpoint
+
+**GET** `/maps/get-distance-time`
+
+## Description
+
+This endpoint calculates the distance and estimated travel time between two locations using the Google Maps Distance Matrix API.
+
+## Request
+
+### Headers
+
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+### Query Parameters
+
+| Parameter     | Type   | Required | Description                   |
+| ------------- | ------ | -------- | ----------------------------- |
+| `origin`      | String | Yes      | Starting point of the journey |
+| `destination` | String | Yes      | End point of the journey      |
+
+## Response
+
+### Success (200 OK)
+
+#### Example Response
+
+```json
+{
+  "distance": {
+    "text": "12.4 km",
+    "value": 12400
+  },
+  "duration": {
+    "text": "25 mins",
+    "value": 1500
+  }
+}
+```
+
+### Error (400 Bad Request)
+
+#### Example Response
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Origin must be at least 3 characters long",
+      "param": "origin",
+      "location": "query"
+    }
+  ]
+}
+```
+
+## Example Usage
+
+```bash
+curl -X GET "http://localhost:4000/maps/get-distance-time?origin=Silicon+Valley&destination=San+Francisco" \
+-H "Authorization: Bearer jwt_token_here"
+```
+
+# API Documentation: `/maps/get-suggestions`
+
+## Endpoint
+
+**GET** `/maps/get-suggestions`
+
+## Description
+
+This endpoint provides address suggestions based on user input using the Google Maps Place Autocomplete API.
+
+## Request
+
+### Headers
+
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+### Query Parameters
+
+| Parameter | Type   | Required | Description                           |
+| --------- | ------ | -------- | ------------------------------------- |
+| `input`   | String | Yes      | The text input to get suggestions for |
+
+## Response
+
+### Success (200 OK)
+
+#### Example Response
+
+```json
+[
+  {
+    "description": "Silicon Valley, California, USA",
+    "place_id": "ChIJ9T_5iuTKj4ARe3GfygqMnbk",
+    "structured_formatting": {
+      "main_text": "Silicon Valley",
+      "secondary_text": "California, USA"
+    }
+  }
+]
+```
+
+### Error (400 Bad Request)
+
+#### Example Response
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Input must be at least 3 characters long",
+      "param": "input",
+      "location": "query"
+    }
+  ]
+}
+```
+
+## Example Usage
+
+```bash
+curl -X GET "http://localhost:4000/maps/get-suggestions?input=Silicon" \
+-H "Authorization: Bearer jwt_token_here"
+```

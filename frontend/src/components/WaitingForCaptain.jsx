@@ -8,8 +8,6 @@ const WaitingForCaptain = ({ setWaitingForCaptainPanelOpen }) => {
     <div className="flex flex-col w-full items-center p-3 gap-y-3">
       <MdCancel
         onClick={() => {
-          // setConfrimRidePanelOpen(false);
-          // setVehiclePanelOpen(true);
           setWaitingForCaptainPanelOpen(false);
         }}
         className="w-8 h-8 mt-1 cursor-pointer absolute right-2 top-2"
