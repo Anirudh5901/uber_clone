@@ -967,3 +967,306 @@ This endpoint provides address suggestions based on user input using the Google 
 curl -X GET "http://localhost:4000/maps/get-suggestions?input=Silicon" \
 -H "Authorization: Bearer jwt_token_here"
 ```
+
+# API Documentation: `/maps/captain-get-distance-time`
+
+## Endpoint
+
+**GET** `/maps/captain-get-distance-time`
+
+## Description
+
+This endpoint calculates the distance and estimated travel time between two locations, specifically for captains.
+
+## Request
+
+### Headers
+
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+### Query Parameters
+
+| Parameter     | Type   | Required | Description                   |
+| ------------- | ------ | -------- | ----------------------------- |
+| `origin`      | String | Yes      | Starting point of the journey |
+| `destination` | String | Yes      | End point of the journey      |
+
+## Response
+
+### Success (200 OK)
+
+#### Example Response
+
+```json
+{
+  "distance": {
+    "text": "12.4 km",
+    "value": 12400
+  },
+  "duration": {
+    "text": "25 mins",
+    "value": 1500
+  }
+}
+```
+
+### Error (400 Bad Request)
+
+#### Example Response
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Origin must be at least 3 characters long",
+      "param": "origin",
+      "location": "query"
+    }
+  ]
+}
+```
+
+# API Documentation: `/rides/create`
+
+## Endpoint
+
+**POST** `/rides/create`
+
+## Description
+
+This endpoint creates a new ride request. It validates the input data, calculates fare based on distance and vehicle type, creates a ride record in the database, and notifies nearby captains.
+
+## Request
+
+### Headers
+
+- `Content-Type: application/json`
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+### Body
+
+| Field         | Type   | Required | Description                                    |
+| ------------- | ------ | -------- | ---------------------------------------------- |
+| `pickup`      | String | Yes      | Pickup location address (minimum 3 characters) |
+| `destination` | String | Yes      | Destination address (minimum 3 characters)     |
+| `vehicleType` | String | Yes      | Type of vehicle ("car", "motorcycle", "auto")  |
+
+## Response
+
+### Success (201 Created)
+
+#### Example Response
+
+```json
+{
+  "_id": "ride_id_here",
+  "user": "user_id_here",
+  "pickup": "Silicon Valley",
+  "destination": "San Francisco",
+  "fare": 450.75,
+  "status": "pending",
+  "duration": 1500,
+  "distance": 12400
+}
+```
+
+### Error (400 Bad Request)
+
+#### Example Response
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Invalid pickup address",
+      "param": "pickup",
+      "location": "body"
+    }
+  ]
+}
+```
+
+# API Documentation: `/rides/get-fare`
+
+## Endpoint
+
+**GET** `/rides/get-fare`
+
+## Description
+
+This endpoint calculates the estimated fare for a ride based on pickup and destination locations.
+
+## Request
+
+### Headers
+
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+### Query Parameters
+
+| Parameter     | Type   | Required | Description                   |
+| ------------- | ------ | -------- | ----------------------------- |
+| `pickup`      | String | Yes      | Starting point of the journey |
+| `destination` | String | Yes      | End point of the journey      |
+
+## Response
+
+### Success (200 OK)
+
+#### Example Response
+
+```json
+{
+  "car": 450.75,
+  "motorcycle": 250.5,
+  "auto": 350.25
+}
+```
+
+# API Documentation: `/rides/confirm`
+
+## Endpoint
+
+**POST** `/rides/confirm`
+
+## Description
+
+This endpoint allows a captain to confirm and accept a ride request.
+
+## Request
+
+### Headers
+
+- `Content-Type: application/json`
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+### Body
+
+| Field    | Type   | Required | Description        |
+| -------- | ------ | -------- | ------------------ |
+| `rideId` | String | Yes      | MongoDB ID of ride |
+
+## Response
+
+### Success (200 OK)
+
+#### Example Response
+
+```json
+{
+  "_id": "ride_id_here",
+  "user": {
+    "_id": "user_id_here",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    }
+  },
+  "captain": {
+    "_id": "captain_id_here",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    }
+  },
+  "status": "accepted",
+  "otp": "123456"
+}
+```
+
+# API Documentation: `/rides/start-ride`
+
+## Endpoint
+
+**GET** `/rides/start-ride`
+
+## Description
+
+This endpoint allows a captain to start a confirmed ride using the OTP provided by the user.
+
+## Request
+
+### Headers
+
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+### Query Parameters
+
+| Field    | Type   | Required | Description                  |
+| -------- | ------ | -------- | ---------------------------- |
+| `rideId` | String | Yes      | MongoDB ID of ride           |
+| `otp`    | String | Yes      | 6-digit OTP provided by user |
+
+## Response
+
+### Success (200 OK)
+
+#### Example Response
+
+```json
+{
+  "_id": "ride_id_here",
+  "status": "ongoing",
+  "user": {
+    "_id": "user_id_here",
+    "fullname": {
+      "firstname": "John"
+    }
+  },
+  "captain": {
+    "_id": "captain_id_here",
+    "fullname": {
+      "firstname": "Jane"
+    }
+  }
+}
+```
+
+# API Documentation: `/rides/end-ride`
+
+## Endpoint
+
+**POST** `/rides/end-ride`
+
+## Description
+
+This endpoint allows a captain to end an ongoing ride.
+
+## Request
+
+### Headers
+
+- `Content-Type: application/json`
+- `Authorization: Bearer <token>` or Cookie with `token`
+
+### Body
+
+| Field    | Type   | Required | Description        |
+| -------- | ------ | -------- | ------------------ |
+| `rideId` | String | Yes      | MongoDB ID of ride |
+
+## Response
+
+### Success (200 OK)
+
+#### Example Response
+
+```json
+{
+  "_id": "ride_id_here",
+  "status": "completed",
+  "user": {
+    "_id": "user_id_here",
+    "fullname": {
+      "firstname": "John"
+    }
+  },
+  "captain": {
+    "_id": "captain_id_here",
+    "fullname": {
+      "firstname": "Jane"
+    }
+  },
+  "fare": 450.75
+}
+```
