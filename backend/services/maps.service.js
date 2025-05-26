@@ -1,4 +1,5 @@
 const axios = require("axios");
+const captainModel = require("../models/captain.model");
 module.exports.getAddressCoordinate = async (address) => {
   const apiKey = process.env.GOOGLE_MAPS_API;
   const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
@@ -71,4 +72,36 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
     console.log(error);
     throw error;
   }
+};
+
+//This function finds captains (or any location-based data) within a certain distance from a given point
+module.exports.getCaptainsInTheRadius = async (
+  ltd,
+  lng,
+  radius,
+  vehicleType
+) => {
+  //radius in km
+  console.log("VEHICLETYPE INPUT::", vehicleType);
+  const captains = await captainModel.find({
+    location: {
+      $geoWithin: {
+        $centerSphere: [[ltd, lng], radius / 6371],
+      },
+    },
+  });
+  //location is by default in mongodb. it is the field in our documents that stores geographic coordinates
+  //$geoWithin: MongoDb operator for finding locations within a shape
+  //$centerSphere: Defines a circular area to search within
+  //[ltd, lng]: the center point coordinates
+  //radius/3963.2: Converts miles to radians(3963.2 is Earth's radius in miles)
+  console.log("CAPTAINS IN RADIUS:", captains);
+  const captainsWithChosenVehicleType = captains.filter(
+    (captain) => captain.vehicle.vehicleType === vehicleType
+  );
+  console.log(
+    "CAPTAINS WITH CHOSEN VEHICLE TYPE",
+    captainsWithChosenVehicleType
+  );
+  return captainsWithChosenVehicleType;
 };

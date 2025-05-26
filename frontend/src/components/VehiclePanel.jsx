@@ -36,7 +36,7 @@ const VehiclePanel = ({
             </span>
             4
           </h4>
-          <h5>2 mins away</h5>
+          {/* <h5>2 mins away</h5> */}
           <p className="text-sm text-gray-500">Affordable, compact rides</p>
         </div>
         <h2 className="text-2xl font-semibold">Rs{Math.round(fare.car, 2)}</h2>
@@ -63,7 +63,7 @@ const VehiclePanel = ({
             </span>
             1
           </h4>
-          <h5>2 mins away</h5>
+          {/* <h5>2 mins away</h5> */}
           <p className="text-sm text-gray-500">Affordable, motorcycle rides</p>
         </div>
         <h2 className="text-2xl font-semibold">
@@ -93,7 +93,7 @@ const VehiclePanel = ({
             </span>
             2-3
           </h4>
-          <h5>2 mins away</h5>
+          {/* <h5>2 mins away</h5> */}
           <p className="text-sm text-gray-500">Affordable, auto rides</p>
         </div>
         <h2 className="text-2xl font-semibold">Rs{fare.auto}</h2>

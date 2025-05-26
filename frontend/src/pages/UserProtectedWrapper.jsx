@@ -29,7 +29,8 @@ const UserProtectedWrapper = ({ children }) => {
 
         if (response.status === 200) {
           const data = response.data;
-          setUser(data.user);
+          console.log("USER PROTECTED WRAPPER", data);
+          setUser(data);
         }
       } catch (error) {
         console.log(error);

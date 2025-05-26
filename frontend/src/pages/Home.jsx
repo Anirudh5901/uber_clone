@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { IoMdArrowDropdownCircle } from "react-icons/io";
@@ -10,6 +10,10 @@ import LookingForCaptain from "../components/LookingForCaptain";
 import WaitingForCaptain from "../components/WaitingForCaptain";
 import axios from "axios";
 import Button from "../components/Button";
+import { UserDataContext } from "../context/UserContext";
+import { SocketContext } from "../context/SocketContext";
+import { useNavigate } from "react-router-dom";
+import LiveTracking from "../components/LiveTracking";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -26,12 +30,37 @@ const Home = () => {
   const [activeField, setActiveField] = useState(null);
   const [fare, setFare] = useState({});
   const [vehicleType, setVehicleType] = useState(null);
+  const [ride, setRide] = useState(null);
 
   const panelRef = useRef(null);
   const vehiclePanelOpenRef = useRef(null);
   const confirmRidePanelOpenRef = useRef(null);
   const lookingForCaptainRef = useRef(null);
   const waitingForCaptainRef = useRef(null);
+
+  const { user } = useContext(UserDataContext);
+  const { socket } = useContext(SocketContext);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    socket.emit("join", {
+      userType: "user",
+      userId: user._id,
+    });
+  }, [user, socket]);
+
+  socket.on("ride-confirmed", (ride) => {
+    console.log("ride confirmation details:", ride);
+    setWaitingForCaptainPanelOpen(true);
+    setRide(ride);
+  });
+
+  socket.on("ride-started", (ride) => {
+    console.log("Ride started: ", ride);
+    setWaitingForCaptainPanelOpen(false);
+    navigate("/riding", { state: { ride } });
+  });
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -189,6 +218,7 @@ const Home = () => {
       {/* image/logo */}
       <div className="h-full w-full bg-violet-400">
         {/* image as temporary background */}
+        <LiveTracking />
       </div>
       <div className=" flex flex-col justify-end  absolute w-full top-0 h-screen">
         <div className="h-[30%] p-5 bg-white relative">
@@ -280,7 +310,7 @@ const Home = () => {
 
       <div
         ref={lookingForCaptainRef}
-        className="absolute z-10 bottom-0 p-5  bg-white w-full translate-y-full"
+        className="absolute z-10 bottom-0 p-5  bg-white w-full translate-y-full h-[69%]"
       >
         <LookingForCaptain
           setLookingForCaptainPanelOpen={setLookingForCaptainPanelOpen}
@@ -297,6 +327,8 @@ const Home = () => {
       >
         <WaitingForCaptain
           setWaitingForCaptainPanelOpen={setWaitingForCaptainPanelOpen}
+          ride={ride}
+          vehicleType={vehicleType}
         />
       </div>
     </div>

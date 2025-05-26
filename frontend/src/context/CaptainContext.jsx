@@ -6,9 +6,20 @@ const CaptainContext = ({ children }) => {
   const [captain, setCaptain] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [totalDistance, setTotalDistance] = useState(0);
+  const [totalFare, setTotalFare] = useState(0);
+
+  const updateTotals = (distance, fare) => {
+    setTotalDistance((prev) => prev + distance);
+    setTotalFare((prev) => prev + fare);
+  };
 
   const updateCaptain = (captainData) => {
     setCaptain(captainData);
+  };
+
+  const updateCaptainLocation = (location) => {
+    setCaptain((prev) => ({ ...prev, location }));
   };
 
   const value = {
@@ -19,6 +30,10 @@ const CaptainContext = ({ children }) => {
     error,
     setError,
     updateCaptain,
+    totalDistance,
+    totalFare,
+    updateTotals,
+    updateCaptainLocation,
   };
 
   useEffect(() => {
